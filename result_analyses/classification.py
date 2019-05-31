@@ -183,67 +183,7 @@ class ClassificationResults(ResultAnalysis):
             paradigms = ["sentences", "pictures", "wordclouds", "average"]
             paradigm_index = paradigm - 1
             self.paradigm = paradigms[paradigm_index]
-            
-# =============================================================================
-#             
-# # =============================================================================
-# #             if selection_method == "roi":
-# #                 accuracy_file = self.load_accuracies(selection_method)
-# #                 accuracy_file = self.transform_randoms(accuracy_file, selection_method)
-# #                 
-# #                 # pick arbitrary subject, they all had equally many permutations
-# #                 mean_distribution = []
-# #                 areas = {}
-# #                 
-# #                 # all have the same areas
-# #                 for area in accuracy_file["random"]["M01"].keys():
-# # 
-# #                     all_accuracies = []
-# #                     pvalues = []
-# #                     for subject_id in accuracy_file["accuracy"].keys():
-# #                         all_accuracies.append(accuracy_file["accuracy"][subject_id][area])
-# #                         p_value = self.calculate_p_value(accuracy_file["accuracy"][subject_id][area], accuracy_file["random"][subject_id][area])
-# #                         if p_value < 0.05:
-# #                             pvalues.append(p_value)
-# #                     mean_accuracy = np.mean(all_accuracies)
-# #                     print(mean_accuracy)
-# #                     
-# #                 
-# #                     
-# #                     
-# #                     if len(pvalues) >= 0.5 * len(list(accuracy_file["accuracy"].keys())):
-# #                         print(area + " IS SIGNIFICANT")
-# #                         
-# #                         # used indices from the matlab file for voxel selection ROI
-# #                         if area == "IFG":
-# #                             index_area = [11, 13, 15]
-# #                         elif area == "MTG":
-# #                             index_area = [85]
-# #                         elif area == "post_cing":
-# #                             index_area = [35]
-# #                         elif area == "precuneus":
-# #                             index_area = [67]
-# #                         elif area == "FFG":
-# #                             index_area = [55]
-# #                         elif area == "paraHIP":
-# #                             index_area = [39]
-# #                         
-# #                         # areas are called the same in every participant
-# #                         datafile = scipy.io.loadmat(self.data_dir + "M01/data_180concepts_sentences.mat")["meta"]
-# #                         for index in index_area:
-# #                             area_name = datafile["rois"][0][0][0][0][index - 1][0][0]
-# #                             areas[area_name] = mean_accuracy
-# #                         
-# #                 self.paradigm = paradigms[paradigm_index]
-# #                 self.map_brain(areas, selection_method)
-# # =============================================================================
-#                 
-#             #else:
-#                 #areas = self.load_proportions()
-#     
-#                 #if not len(areas) == len([1,2,3]):
-# =============================================================================
-                    
+                     
             accuracy_file = self.load_accuracies(selection_method)
             print("accuracy file loaded")
                 
@@ -252,15 +192,6 @@ class ClassificationResults(ResultAnalysis):
                 print(subject_id)
                 datafile = scipy.io.loadmat(self.data_dir + subject_id + "/data_180concepts_" + self.paradigm + ".mat")
                 area_number = datafile["meta"]["roiMultimask"][0][0][0][0]
-                    
-# =============================================================================
-# # =============================================================================
-# #                 file = "/home/evihendrikx/Documents/brain-lang-master/server_files/classification/only_random/classification_sentences_searchlight.pickle"
-# #                 with open(file, 'rb') as handle:
-# #                     random_file = pickle.load(handle)
-# #                 random_scores = random_file["random"][subject_id]
-# # =============================================================================
-# =============================================================================
       
                 areas_subject = {}
                 for voxel_index in range(len(accuracy_file["accuracy"][subject_id])):
@@ -284,49 +215,6 @@ class ClassificationResults(ResultAnalysis):
                 
             self.analyse_area_accuracies(areas, paradigm)
                     
-                
-# =============================================================================
-#                     # p_value = self.calculate_p_value(accuracy_score, random_scores)
-#                     
-# # =============================================================================
-# #                             if p_value < 0.0000094844: 
-# #                                 if area_number[voxel_index][0] == 0:
-# #                                     continue
-# #                                 else:
-# #                                     area_index = area_number[voxel_index][0] - 1
-# #                                     area = datafile["meta"]["rois"][0][0][0][0][area_index][0][0]
-# #                                     if not area in areas_subject:
-# #                                         areas_subject[area] = {}
-# #                                         areas_subject[area]["score"] = 1
-# #                                         areas_subject[area]["index"] = area_index
-# #                                     else:
-# #                                         areas_subject[area]["score"] = areas_subject[area]["score"] + 1
-# # =============================================================================
-#                                 
-# # =============================================================================
-# #                 for area in areas_subject:
-# #                     total_voxels_in_area = datafile["meta"]["roiColumns"][0][0][0][0][areas_subject[area]["index"]][0]
-# #                     proportion = areas_subject[area]["score"] / len(total_voxels_in_area)                 
-# # =============================================================================
-# # =============================================================================
-# #                     if area in areas:
-# #                         # len of areas[area] is how many participants have it
-# #                         areas[area].append(proportion)
-# #                     else:
-# #                         areas[area] = [proportion]
-# # =============================================================================
-#                             
-# # =============================================================================
-# #             self.save_proportions(areas)
-# #                 area_number[voxel_index][0] == 0:
-# #         for area in areas.keys():
-# #             average_proportion = sum(areas[area]) / len([file for file in listdir(self.data_dir)])
-# #             areas[area] = average_proportion
-# #                 
-# #         print(areas)
-# #         self.map_brain(areas, selection_method)
-# # =============================================================================
-# =============================================================================
             
     def map_brain(self, average_proportions, selection_method, paradigm):
         
@@ -373,15 +261,6 @@ class ClassificationResults(ResultAnalysis):
             roi_map = image.math_img('img == %s' % roi_id, img=dataset.maps)
             plotting.plot_roi(roi_map, title=roi)
                 
-        # TODO: only include area if accuracy is above a certain level --> need a different file for that
-        
-     
-# =============================================================================     
-#         aal_new = nib.Nifti1Image(new_data_proportion, aal_img.affine)
-#         hot = cm.get_cmap('hot_r')        
-#         plotting.plot_roi(aal_new, cmap=hot, colorbar=True, vmin = 75, vmax = 100, output_file = self.save_dir + self.analysis_method + "_brain_map_proportion_acc_" + selection_method + "_" + self.paradigm +".png")
-#         plotting.show()
-# =============================================================================
         
         aal_new = nib.Nifti1Image(new_data_rank, aal_img.affine)
         hot = cm.get_cmap('hot')        
@@ -400,8 +279,6 @@ class ClassificationResults(ResultAnalysis):
         plt.rcParams['axes.facecolor'] = 'white'
         plt.rcParams['axes.edgecolor'] = 'black'
         plt.rcParams['ytick.color'] = 'black'
-
-        # TODO: adapt to ROI selection 
         
         self.paradigm = paradigm
         paradigms = ["sentences","pictures","wordclouds","average"]
@@ -515,17 +392,6 @@ class ClassificationResults(ResultAnalysis):
         elif paradigms[paradigm_index] == "wordclouds":
             title = "word cloud paradigm"
             
-# =============================================================================
-#         import pylab
-#         fig = pylab.figure()
-#         figlegend = pylab.figure(figsize=(3,2))
-#         ax = fig.add_subplot(111)
-#         lines = ax.plot(range(10), pylab.randn(10), range(10), pylab.randn(10))
-#         figlegend.legend(lines, ('one', 'two'), 'center')
-#         fig.show()
-#         figlegend.show()
-#         figlegend.savefig('legend.png')
-# =============================================================================
         
         plt.title(title)
         # plt.legend(handles = legend_elements, loc='center left', bbox_to_anchor=(1, 0.5))
@@ -567,12 +433,6 @@ class ClassificationResults(ResultAnalysis):
             
             ordered = sorted(mean_accuracies, reverse=True)
             
-# =============================================================================
-#             r = {key: rank for rank, key in enumerate(sorted(set(accuracies[subject_id].values()), reverse=True), 1)}
-#             ranks = {k: r[v] for k,v in accuracies[subject_id].items()}
-#             print(ranks)
-# =============================================================================
-
            
             
             for area in accuracies[subject_id].keys():
@@ -610,7 +470,7 @@ class ClassificationResults(ResultAnalysis):
             
         # print(t)
         
-        #
+        
         mean_per_area = {}
         rank_per_area = {}
         for area in score.keys():
@@ -624,17 +484,4 @@ class ClassificationResults(ResultAnalysis):
         print(Top10_mean)
         
         return score
-# =============================================================================
-#         max_acc = max([score[area]["percentage_of_max"]["mean"] for area in score.keys()])
-#         print(max_acc)
-#         print([area for area in score.keys() if score[area]["percentage_of_max"]["mean"] == max_acc])
-#         
-#         min_rank = min([score[area]["rank"]["mean"] for area in score.keys()])
-#         print(min_rank)
-#         print([area for area in score.keys() if score[area]["rank"]["mean"] == min_rank])        
-#             
-# =============================================================================
-        
-
-
 
