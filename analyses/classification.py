@@ -68,7 +68,7 @@ class ClassifySearchlight(Classification):
 
         # see if file already exists
         accuracies = self.load_classifications(self.selection)
-        if len(accuracies) == len(["accuracy", "random"]):
+        if len(accuracies) == len(["accuracy"]):
             return(accuracies)
         
         # if it doesn't, create a file with random and actual accuracies
