@@ -27,7 +27,6 @@ class PereiraReader(FmriReader):
 
         # Collect scan events
         blocks = {}
-        mni_voxels = {}
         xyz_voxels = {}
 
 
