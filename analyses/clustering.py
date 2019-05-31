@@ -17,48 +17,48 @@ class ClusterROI(Clustering):
         super(ClusterROI, self).__init__(user_dir, paradigm)
         self.selection = "roi"
         
-    def cluster_fmri(self):
-        
-        ARI = self.load_ARI()
-        if len(ARI) == len(self.subject_ids):
-            return ARI
-        
-        else:
-            self.read_data()
-            self.create_embeddding_lists()
-            
-            selection = SelectROI(self.user_dir)
-            voxel_selection = selection.select_voxels()
-                
-            clusters = {}
-            ARI = {}
-            for subject_id in voxel_selection.keys():
-                ARI[subject_id] = {}
-                for area in voxel_selection[subject_id].keys():
-                    ARI[subject_id][area] = {}
-                    if not area in clusters.keys():
-                        clusters[area] = {}
-                    clusters[area][subject_id] = {}
-                    clusters[area][subject_id]["total"], clusters[area][subject_id]["abstract"], clusters[area][subject_id]["concrete"] = {}, {},  {}
-                    clusters[area][subject_id]["total"]["clusters"], clusters[area][subject_id]["abstract"]["clusters"], clusters[area][subject_id]["concrete"]["clusters"], clusters[area][subject_id]["total"]["labels"], clusters[area][subject_id]["abstract"]["labels"], clusters[area][subject_id]["concrete"]["labels"] = self.get_scans_and_clusters(voxel_selection[subject_id][area], subject_id)
-    
-                    for concreteness in ["total"]: # TODO? ,"abstract","concrete"]:
-                        ARI[subject_id][area][concreteness] = {}
-                        labels = clusters[area][subject_id][concreteness]["labels"]
-                        
-                        if concreteness == "total":
-                            true_index = self.concrete_index
-    
-                        ARI[subject_id][area][concreteness]["accuracy"] = adjusted_rand_score(true_index, labels)
-                        ARI[subject_id][area][concreteness]["random"] = []
-                        for i in range(1000):
-                            np.random.shuffle(labels)
-                            ARI[subject_id][area][concreteness]["random"].append(adjusted_rand_score(self.concrete_index, labels))
-                        
-            self.save_clusters(clusters)
-            self.save_ARI(ARI)
-            
-            return ARI
+#    def cluster_fmri(self):
+#        
+#        ARI = self.load_ARI()
+#        if len(ARI) == len(self.subject_ids):
+#            return ARI
+#        
+#        else:
+#            self.read_data()
+#            self.create_embeddding_lists()
+#            
+#            selection = SelectROI(self.user_dir)
+#            voxel_selection = selection.select_voxels()
+#                
+#            clusters = {}
+#            ARI = {}
+#            for subject_id in voxel_selection.keys():
+#                ARI[subject_id] = {}
+#                for area in voxel_selection[subject_id].keys():
+#                    ARI[subject_id][area] = {}
+#                    if not area in clusters.keys():
+#                        clusters[area] = {}
+#                    clusters[area][subject_id] = {}
+#                    clusters[area][subject_id]["total"], clusters[area][subject_id]["abstract"], clusters[area][subject_id]["concrete"] = {}, {},  {}
+#                    clusters[area][subject_id]["total"]["clusters"], clusters[area][subject_id]["abstract"]["clusters"], clusters[area][subject_id]["concrete"]["clusters"], clusters[area][subject_id]["total"]["labels"], clusters[area][subject_id]["abstract"]["labels"], clusters[area][subject_id]["concrete"]["labels"] = self.get_scans_and_clusters(voxel_selection[subject_id][area], subject_id)
+#    
+#                    for concreteness in ["total"]: # TODO? ,"abstract","concrete"]:
+#                        ARI[subject_id][area][concreteness] = {}
+#                        labels = clusters[area][subject_id][concreteness]["labels"]
+#                        
+#                        if concreteness == "total":
+#                            true_index = self.concrete_index
+#    
+#                        ARI[subject_id][area][concreteness]["accuracy"] = adjusted_rand_score(true_index, labels)
+#                        ARI[subject_id][area][concreteness]["random"] = []
+#                        for i in range(1000):
+#                            np.random.shuffle(labels)
+#                            ARI[subject_id][area][concreteness]["random"].append(adjusted_rand_score(self.concrete_index, labels))
+#                        
+#            self.save_clusters(clusters)
+#            self.save_ARI(ARI)
+#            
+#            return ARI
         
     def bar_graph_clusters(self):
         clusters = self.load_clusters()
@@ -218,39 +218,40 @@ class ClusterStable(Clustering):
     def __init__(self, user_dir, paradigm):
         super(ClusterStable, self).__init__(user_dir, paradigm)       
         self.selection = "stable"
-    
-    def cluster_fmri(self):
-        
-        ARI = self.load_ARI()
-        if len(ARI) == len(self.subject_ids):
-            return ARI
-        else:
-            self.read_data()
-            self.create_embeddding_lists()
-            
-            
-            selection = SelectStable(self.user_dir, "clustering")
-            voxel_selection = selection.select_voxels()
-                
-            clusters = {}
-            ARI = {}
-            for subject_id in voxel_selection.keys():
-                ARI[subject_id] = {}
-                clusters[subject_id] = {}
-                clusters[subject_id]["total"], clusters[subject_id]["abstract"], clusters[subject_id]["concrete"] = {}, {},  {}
-                clusters[subject_id]["total"]["clusters"], clusters[subject_id]["abstract"]["clusters"], clusters[subject_id]["concrete"]["clusters"], clusters[subject_id]["total"]["labels"], clusters[subject_id]["abstract"]["labels"], clusters[subject_id]["concrete"]["labels"] = self.get_scans_and_clusters(voxel_selection[subject_id], subject_id)
-                for concreteness in ["total"]: # TODO ,"abstract","concrete"]:
-                    ARI[subject_id][concreteness] = {}
-                    labels = clusters[subject_id][concreteness]["labels"]
-                    ARI[subject_id][concreteness]["accuracy"] = adjusted_rand_score(self.concrete_index, labels)
-                    ARI[subject_id][concreteness]["random"] = []
-                    for i in range(1000):
-                        np.random.shuffle(labels)
-                        ARI[subject_id][concreteness]["random"].append(adjusted_rand_score(self.concrete_index, labels))
-                        
-            self.save_clusters(clusters)
-            self.save_ARI(ARI)
-            return ARI
+
+#       
+#    def cluster_fmri(self):
+#        
+#        ARI = self.load_ARI()
+#        if len(ARI) == len(self.subject_ids):
+#            return ARI
+#        else:
+#            self.read_data()
+#            self.create_embeddding_lists()
+#            
+#            
+#            selection = SelectStable(self.user_dir, "clustering")
+#            voxel_selection = selection.select_voxels()
+#                
+#            clusters = {}
+#            ARI = {}
+#            for subject_id in voxel_selection.keys():
+#                ARI[subject_id] = {}
+#                clusters[subject_id] = {}
+#                clusters[subject_id]["total"], clusters[subject_id]["abstract"], clusters[subject_id]["concrete"] = {}, {},  {}
+#                clusters[subject_id]["total"]["clusters"], clusters[subject_id]["abstract"]["clusters"], clusters[subject_id]["concrete"]["clusters"], clusters[subject_id]["total"]["labels"], clusters[subject_id]["abstract"]["labels"], clusters[subject_id]["concrete"]["labels"] = self.get_scans_and_clusters(voxel_selection[subject_id], subject_id)
+#                for concreteness in ["total"]: # TODO ,"abstract","concrete"]:
+#                    ARI[subject_id][concreteness] = {}
+#                    labels = clusters[subject_id][concreteness]["labels"]
+#                    ARI[subject_id][concreteness]["accuracy"] = adjusted_rand_score(self.concrete_index, labels)
+#                    ARI[subject_id][concreteness]["random"] = []
+#                    for i in range(1000):
+#                        np.random.shuffle(labels)
+#                        ARI[subject_id][concreteness]["random"].append(adjusted_rand_score(self.concrete_index, labels))
+#                        
+#            self.save_clusters(clusters)
+#            self.save_ARI(ARI)
+#            return ARI
         
     def bar_graph_clusters(self):
         clusters = self.load_clusters()
@@ -337,117 +338,3 @@ class ClusterStable(Clustering):
 # =============================================================================
             return proportion_clusters
         
-        
-class ClusterSearchlight(Clustering):
-
-    def __init__(self, user_dir, paradigm):
-        super(ClusterSearchlight, self).__init__(user_dir, paradigm)
-        self.selection = "searchlight"
-        
-        
-    def cluster_fmri(self):
-        
-        ARI = self.load_ARI()
-        if len(ARI) == len(self.subject_ids):
-            return ARI
-            
-        else:
-            self.read_data()
-            self.create_embeddding_lists()
-            selection = SelectSearchlight(self.user_dir)
-            voxel_selection = selection.select_voxels()
-            clusters = {}
-            ARI = {}
-            
-            for subject_id in voxel_selection.keys():
-                print(subject_id)
-                ARI[subject_id] = {}
-                clusters[subject_id] = {}
-                
-                for concreteness in ["total","abstract","concrete"]:
-                    ARI[subject_id][concreteness] = {}
-                
-                for score in ["accuracy", "random"]:  
-                    print(subject_id + score)
-                    clusters[subject_id][score] = {}                 
-                    clusters[subject_id][score]["total"], clusters[subject_id][score]["abstract"], clusters[subject_id][score]["concrete"] = {}, {}, {}
-                    clusters[subject_id][score]["total"]["clusters"], clusters[subject_id][score]["abstract"]["clusters"], clusters[subject_id][score]["concrete"]["clusters"], clusters[subject_id][score]["total"]["labels"], clusters[subject_id][score]["abstract"]["labels"], clusters[subject_id][score]["concrete"]["labels"] = [], [], [], [], [], []
-                    
-                    for concreteness in ["total","abstract","concrete"]:
-                        ARI[subject_id][concreteness][score] = []
-                    
-                    if score == "random":
-                        voxel_selection[subject_id] = self.select_three_voxels(voxel_selection[subject_id], subject_id)
-                        
-                    voxel_index = 0
-                    for voxel in voxel_selection[subject_id]:
-                        if score == "accuracy":
-                            if voxel_index % 1000 == 0:
-                                print(str(voxel_index) + "/" + str(len(voxel_selection[subject_id])))
-                        else:
-                            print(str(voxel_index) + "/3")
-
-                        total_clusters, abstract_clusters, concrete_clusters, total_labels, abstract_labels, concrete_labels = self.get_scans_and_clusters(voxel, subject_id)
-                        clusters[subject_id][score]["total"]["clusters"].append(total_clusters); clusters[subject_id][score]["abstract"]["clusters"].append(abstract_clusters); clusters[subject_id][score]["concrete"]["clusters"].append(concrete_clusters)
-                        clusters[subject_id][score]["total"]["labels"].append(total_labels); clusters[subject_id][score]["abstract"]["labels"].append(abstract_labels); clusters[subject_id][score]["concrete"]["labels"].append(concrete_labels)
-                        
-                        for concreteness in ["total"]:
-                            labels = clusters[subject_id][score][concreteness]["labels"][voxel_index]
-                            if score == "accuracy":
-                                ARI[subject_id][concreteness][score].append(adjusted_rand_score(self.concrete_index, labels))
-                            else:
-                                ARI[subject_id][concreteness][score].append([])
-                                for i in range(10):
-                                    if i% 1000 == 0:
-                                        print(i)
-                                    np.random.shuffle(labels)
-                                    ARI[subject_id][concreteness][score][voxel_index].append(adjusted_rand_score(self.concrete_index, labels))
-                            voxel_index += 1
-                        if voxel_index == 10:
-                            break
-                for concreteness in ARI[subject_id].keys():
-                    ARI[subject_id][concreteness]["random"] = np.mean(ARI[subject_id][concreteness]["random"], axis = 0)
-    
-            self.save_clusters(clusters)
-            self.save_ARI(ARI)
-            
-            return ARI
-            
-    def select_three_voxels(self, voxel_selection, subject_id):
-        selected_voxels = []
-        
-        # select areas from matlab file that fall in these lobes, selection is based on the name of the lobe in the region of AAL atlas
-        # this is the same for all subjects
-        frontal = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 23, 24, 25, 26]; frontal_done = False
-        occipital = [49, 50, 51, 52, 53, 54]; occipital_done = False
-        temporal = [81, 82, 83, 84, 85, 86, 87, 88, 89, 90]; temporal_done = False
-        
-        # regions remain constant over all paradigms, so I arbitrarily chose pictures
-        datafile = scipy.io.loadmat(self.data_dir + subject_id + "/data_180concepts_pictures.mat")
-        voxel_to_region_mapping = datafile["meta"]["roiMultimask"][0][0][0][0]
-        for voxels in np.random.permutation(voxel_selection):
-            if all(voxel_to_region_mapping[voxel] in frontal for voxel in voxels) and frontal_done  == False:
-                selected_voxels.append(voxels)
-                frontal_done = True
-                print("found voxel for frontal")
-            elif all(voxel_to_region_mapping[voxel] in occipital for voxel in voxels) and occipital_done  == False:
-                selected_voxels.append(voxels)
-                occipital_done = True
-                print("found voxel for occipital")
-            elif all(voxel_to_region_mapping[voxel] in temporal for voxel in voxels) and temporal_done  == False:
-                selected_voxels.append(voxels)
-                temporal_done = True
-                print("found voxel for temporal")
-            else:
-                continue
-            
-            if frontal_done == True and occipital_done == True and temporal_done == True:
-                break
-        
-        if not len(selected_voxels) == 3:
-            print("WE HAVE A PROBLEM MORE OR LESS VOXELS SELECTED THAN 3")
-        
-        return selected_voxels
-            
-        
-
