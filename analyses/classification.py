@@ -62,7 +62,7 @@ class ClassifySearchlight(Classification):
     def __init__(self, user_dir, paradigm):
         super(ClassifySearchlight, self).__init__(user_dir, paradigm)
     
-    def classify(self, reduced_random = False, only_random = False):
+    def classify(self):
         self.selection = "searchlight"
         self.reduced_random = reduced_random
 
@@ -81,7 +81,6 @@ class ClassifySearchlight(Classification):
             
             accuracies_so_far = {}
             accuracies_so_far["accuracy"] = {}
-            accuracies_so_far["random"] = {}
             processed_subject_ids = []
             
             self.read_data()
@@ -89,84 +88,35 @@ class ClassifySearchlight(Classification):
                 print("Going to classify data from: " + subject_id)
         
                 accuracies_so_far["accuracy"][subject_id] = []
-                accuracies_so_far["random"][subject_id] = []
                 
-                if only_random == False:
-                    # determine classification accuracy per voxel (with surroundings)
-                    counter = 1
-                    for voxel_indices in voxel_selection[subject_id]:
-                        print("determine accuracies for voxel: " + str(counter) + "/" + str(len(voxel_selection[subject_id])))  
-                        counter += 1
-                 
-                        # for every word, fetch center and neighbor voxels
-                        scans = []
-                        for block in self.blocks[subject_id]:
-                            selected_voxel_activities = []
-                            all_voxels = [event.scan for event in block.scan_events][0]
-                            for voxel_index in voxel_indices:
-                                selected_voxel_activities.append(all_voxels[voxel_index])
-                            scans.append(selected_voxel_activities)
-        
-                        accuracy = self.run_svc(scans)
-                        if self.reduced_random == False:
-                            random_accuracies = self.random_generator(scans)
-                    
-                        # collect accuracies for all voxels as center
-                        accuracies_so_far["accuracy"][subject_id].append(accuracy)
-                        if self.reduced_random == False:
-                            accuracies_so_far["random"][subject_id].append(random_accuracies)
 
-                # select three voxels in different locations
-                if self.reduced_random == True:
-                    voxel_selection_random = self.select_three_voxels(voxel_selection[subject_id], subject_id)
-                    for voxel_indices in voxel_selection_random:
-                        scans = []
-                        for block in self.blocks[subject_id]:
-                            selected_voxel_activities = []
-                            all_voxels = [event.scan for event in block.scan_events][0]
-                            for voxel_index in voxel_indices:
-                                selected_voxel_activities.append(all_voxels[voxel_index])
-                            scans.append(selected_voxel_activities)
+                # determine classification accuracy per voxel (with surroundings)
+                counter = 1
+                for voxel_indices in voxel_selection[subject_id]:
+                    print("determine accuracies for voxel: " + str(counter) + "/" + str(len(voxel_selection[subject_id])))  
+                    counter += 1
 
-                        random_accuracies = self.random_generator(scans)
-                        accuracies_so_far["random"][subject_id].append(random_accuracies)
-                    accuracies_so_far["random"][subject_id] = np.mean(accuracies_so_far["random"][subject_id], axis = 0)
-                
+                    # for every word, fetch center and neighbor voxels
+                    scans = []
+                    for block in self.blocks[subject_id]:
+                        selected_voxel_activities = []
+                        all_voxels = [event.scan for event in block.scan_events][0]
+                        for voxel_index in voxel_indices:
+                            selected_voxel_activities.append(all_voxels[voxel_index])
+                        scans.append(selected_voxel_activities)
+
+                    accuracy = self.run_svc(scans)
+   
+                    # collect accuracies for all voxels as center
+                    accuracies_so_far["accuracy"][subject_id].append(accuracy)
+              
                 # save in between runs just in case
                 processed_subject_ids.append(subject_id)
                 self.save_classifications(self.selection, accuracies_so_far, processed_subject_ids, intermediate_save = True)
 
             return accuracies_so_far
 
-    def select_three_voxels(self, voxel_selection, subject_id):
-        selected_voxels = []
-
-        # select areas form matlab file that fall in these lobes, selection is based on the name of the lobes in the region of the AAL atlas
-        # this is the same for all subjects
-        frontal = [3,4,5,6,7,8,9,10,11,12,13,14,15,16,23,24,25,26]; frontal_done = False
-        occipital = [49,50,51,52,53,54]; occipital_done = False
-        temporal = [81,82,83,84,85,86,87,88,89,90]; temporal_done = False
-
-        datafile = scipy.io.loadmat(self.data_dir + subject_id + "/data_180concepts_pictures.mat")
-        voxel_to_region_mapping = datafile["meta"]["roiMultimask"][0][0][0][0]
-        for voxels in np.random.permutation(voxel_selection):
-            if all(voxel_to_region_mapping[voxel] in frontal for voxel in voxels) and frontal_done == False:
-                selected_voxels.append(voxels)
-                frontal_done = True
-            elif all(voxel_to_region_mapping[voxel] in occipital for voxel in voxels) and occipital_done == False:
-                selected_voxels.append(voxels)
-                occipital_done = True
-            elif all(voxel_to_region_mapping[voxel] in temporal for voxel in voxels) and temporal_done == False:
-                selected_voxels.append(voxels)
-                temporal_done = True
-            else:
-                continue
-
-            if frontal_done == True and occipital_done == True and temporal_done == True:
-                break
-
-        return selected_voxels
-                  
+                     
 class ClassifyStable(Classification):  
      
     def __init__(self, user_dir, paradigm):
