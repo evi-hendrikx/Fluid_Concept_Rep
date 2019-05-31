@@ -6,8 +6,8 @@ class TextEncoder(object):
         self.save_dir = save_dir
         
         # images can be found on https://osf.io/crwz7/
-        self.img_dir = "/" #TODO: right now I ran this on my own computer and just added the embeddings in already embedded
-        self.corpus_dir = "/" #TODO: right now I ran this on my own computer and just added the embeddings in already embedded
+        self.img_dir = "IMG_DIR" #TODO: right now I ran this on my own computer and just added the embeddings in already embedded
+        self.corpus_dir = "CORPUS_DIR" #TODO: right now I ran this on my own computer and just added the embeddings in already embedded
 
     def load_embeddings(self, embedding_file):
         if os.path.isfile(embedding_file):
