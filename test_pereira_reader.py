@@ -2,7 +2,7 @@ from read_dataset.read_pereira import PereiraReader
 from nilearn import plotting
 
 # SET THE DATA DIR: 
-data_dir = "/datastore/pereira_data/"
+data_dir = "DATA_DIR"
 
 print("\n\Pereira Data")
 pereira_reader = PereiraReader(data_dir, paradigm =1)
