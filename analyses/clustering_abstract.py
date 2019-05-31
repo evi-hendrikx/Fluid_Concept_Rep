@@ -13,13 +13,13 @@ class Clustering(object):
         self.paradigm = paradigm
         
         self.user_dir = user_dir
-        self.data_dir = "/media/evihendrikx/PACKARDBELL/stage_evi/pereira_data/"
+        self.data_dir = "DATADIR"
         self.subject_ids = [file for file in listdir(self.data_dir)]
         
-        self.save_embedding_dir = user_dir + "pereira_code/embeddings/already_embedded/"
+        self.save_embedding_dir = user_dir + "embeddings/already_embedded/"
         
         # where the analysis will be stored
-        self.save_dir = user_dir + "pereira_code/analyses/already_analysed/"
+        self.save_dir = user_dir + "analyses/already_analysed/"
                 
         self.n_total_clusters = 2
         self.n_concreteness_clusters = 11
