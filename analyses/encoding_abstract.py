@@ -12,7 +12,7 @@ class Encoding(object):
         self.paradigm = paradigm
         
         self.user_dir = user_dir
-        self.data_dir = "/datastore/pereira_data/"
+        self.data_dir = "DATADIR"
         self.subject_ids = [file for file in listdir(self.data_dir)]
         
         # where the analysis will be stored
