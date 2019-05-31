@@ -23,11 +23,7 @@ class RSA(object):
     def load_RSA(self, selection = ""):
         paradigms = ["sentences", "pictures", "wordclouds", "average"]
         paradigm_index = self.paradigm - 1
-        if not self.selection == "searchlight":
-            accuracy_file = self.save_dir + "RSA_" + paradigms[paradigm_index] + ".pickle"
-        else:
-            accuracy_file = self.save_dir + "RSA_" + paradigms[paradigm_index] + "_" + self.selection + ".pickle"
-            
+        accuracy_file = self.save_dir + "RSA_" + paradigms[paradigm_index] + ".pickle"            
         
         if os.path.isfile(accuracy_file):
             print("Loading accuracies from " + accuracy_file)
@@ -125,7 +121,7 @@ class RSA(object):
         else:
             axis_labels = labels
             
-        im, cbar = self.heatmap(data, p_values, axis_labels, axis_labels, ax=ax,
+        im, cbar = self.heatmap(data, axis_labels, axis_labels, ax=ax,
                            cmap="BuPu_r", vmin = 0, vmax = 1.5, title = title, cbarlabel = cbarlabel)
     
         fig.tight_layout()
@@ -141,7 +137,7 @@ class RSA(object):
         
 
     
-    def heatmap(self, data, p_values, row_labels, col_labels, ax=None, cbar_kw={}, cbarlabel="", title = "",  **kwargs):
+    def heatmap(self, data, row_labels, col_labels, ax=None, cbar_kw={}, cbarlabel="", title = "",  **kwargs):
         """
         Create a heatmap from a numpy array and two lists of labels.
         Arguments:
