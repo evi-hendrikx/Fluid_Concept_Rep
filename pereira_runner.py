@@ -3,7 +3,7 @@ from analyses.encoding import EncodingStable, EncodingROI
 from analyses.clustering import ClusterROI, ClusterStable
 from analyses.RSA import RSA_ROI_Stable
 
-user_dir = "/home/USERDIR/"
+user_dir = "USER_DIR"
 
 # I chose index 1, 2, or 3, because these are also used in the reader.
 # They correspond to respectively "sentences", "pictures", "wordclouds"
