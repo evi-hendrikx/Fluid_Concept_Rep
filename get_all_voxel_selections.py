@@ -2,7 +2,7 @@
 from select_voxels.selection_methods import SelectStable, SelectROI, SelectSearchlight
 
 
-user_dir = "/home/10978089/"
+user_dir = "USER_DIR"
 
 
 roi_selection = SelectROI(user_dir)
