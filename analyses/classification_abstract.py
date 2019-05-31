@@ -145,31 +145,3 @@ class Classification(object):
         accuracy = (np.array(predictions) == np.array(actual_concretenesses)).sum() / float(len(actual_concretenesses))
         
         return accuracy
-    
-    
-    def random_generator(self, scans):
-        print("selecting random accuracies")
-        random_accuracies = []
-
-        if self.selection == "searchlight":
-            for i in range(0, 106000):
-                random_accuracy = self.run(scans, random_concreteness = True)
-                random_accuracies.append(random_accuracy)
-                if i % 1000 == 0:
-                    print(str(i) + " random accuracies collected")
-            if self.reduced_random == False:
-                unique_elements, count_elements = np.unique(np.asarray(random_accuracies),return_counts = True)
-                random_distribution = np.asarray((unique_elements, count_elements))
-            else:
-                random_distribution = random_accuracies
-        else:
-            for i in range(0,1000):
-                random_accuracy = self.run_svc(scans, random_concreteness = True)
-                random_accuracies.append(random_accuracy)
-                if i % 100 == 0:
-                    print(str(i) + " random accuracies collected")
-        # instead of saving all values, save their frequencies
-            unique_elements, counts_elements = np.unique(np.asarray(random_accuracies), return_counts=True)
-            random_distribution = np.asarray((unique_elements, counts_elements))
-        
-        return random_distribution
