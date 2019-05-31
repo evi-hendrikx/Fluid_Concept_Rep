@@ -1,7 +1,7 @@
 import numpy as np
 from embeddings.abstract_text_encoder import TextEncoder
 import cv2
-# TODO: from keras.applications.resnet50 import ResNet50
+from keras.applications.resnet50 import ResNet50
 from os import listdir
 import scipy
 from sklearn.decomposition import PCA
@@ -82,7 +82,7 @@ class ImageEncoder(TextEncoder):
         # there is no such file, create one
         if not (len(mean_image_embeddings) == len(words)):
             print("Collecting image embeddings from images")
-            # TODO resnet = ResNet50(weights='imagenet', include_top=False, pooling='avg')
+            resnet = ResNet50(weights='imagenet', include_top=False, pooling='avg')
             all_image_embeddings = {}
             
             # collect image embeddings for the 6 used pictures per concept
@@ -95,7 +95,7 @@ class ImageEncoder(TextEncoder):
                     img = scipy.misc.imresize(img, 224.0 / img.shape[0])
                     img = img.reshape((1,) + img.shape)
                    
-                    # TODO: embeddings_for_this_word.append(resnet.predict(img)[0])
+                    embeddings_for_this_word.append(resnet.predict(img)[0])
                     embeddings_for_this_word.append([])
                 
                 # I want to save all 6 separate embeddings and an embedding representing the mean of these 6
