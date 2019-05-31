@@ -5,7 +5,7 @@ import pickle
 class SelectVoxels(object):
     def __init__(self, user_dir):
         self.user_dir = user_dir
-        self.data_dir = "/datastore/pereira_data/"
+        self.data_dir = "DATA_DIR"
         self.save_dir = user_dir + "select_voxels/already_selected/"
         self.subject_ids = [file for file in listdir(self.data_dir)]
 
