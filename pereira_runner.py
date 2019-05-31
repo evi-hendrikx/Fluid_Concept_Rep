@@ -1,6 +1,7 @@
 from analyses.classification import ClassifyStable, ClassifyROI, ClassifySearchlight
 from analyses.encoding import EncodingStable, EncodingROI
 from analyses.clustering import ClusterROI, ClusterStable
+from analyses.rsa import RSA_ROI_Stable
 
 user_dir = "/home/USERDIR/"
 
