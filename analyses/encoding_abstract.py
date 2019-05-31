@@ -45,31 +45,27 @@ class Encoding(object):
         paradigms = ["sentences", "pictures", "wordclouds", "average"]
         paradigm_index = self.paradigm - 1
         
-        if voxel_selection == "searchlight":
-            accuracy_file = self.save_dir + "encoding_" + paradigms[paradigm_index] + "_" + voxel_selection + "_" + embedding + "_" + subject_id + ".pickle"
-        
-        else:
-            # If I save intermediately, I want the filename to show all present participants
-            embs = ""
-            index_embedding = self.embeddings.index(embedding)
-            embeddings_so_far = self.embeddings[:index_embedding + 1]
-            for embedding in embeddings_so_far:
-                embs = embs + "_" + embedding
-        
-            accuracy_file = self.save_dir + "encoding_" + paradigms[paradigm_index] + "_" + voxel_selection + embs + ".pickle"
-        
-            # if I am saving intermediately, remove old file so I don't save the same information twice
-            if not index_embedding == 0:
-                len_last_emb = len(embeddings_so_far[-1])
-                old_embs = embs[: - (len_last_emb + 1)]
-                old_accuracy_file = accuracy_file.replace(embs, old_embs)
-                print("Remove file: " + old_accuracy_file)
-                os.remove(old_accuracy_file)
-        
-            # the last save should be able to be automatically loaded
-            if not len(self.embeddings) == 1:
-                if index_embedding == len(self.embeddings) - 1:
-                    accuracy_file = accuracy_file.replace(embs, "")
+        # If I save intermediately, I want the filename to show all present participants
+        embs = ""
+        index_embedding = self.embeddings.index(embedding)
+        embeddings_so_far = self.embeddings[:index_embedding + 1]
+        for embedding in embeddings_so_far:
+            embs = embs + "_" + embedding
+
+        accuracy_file = self.save_dir + "encoding_" + paradigms[paradigm_index] + "_" + voxel_selection + embs + ".pickle"
+
+        # if I am saving intermediately, remove old file so I don't save the same information twice
+        if not index_embedding == 0:
+            len_last_emb = len(embeddings_so_far[-1])
+            old_embs = embs[: - (len_last_emb + 1)]
+            old_accuracy_file = accuracy_file.replace(embs, old_embs)
+            print("Remove file: " + old_accuracy_file)
+            os.remove(old_accuracy_file)
+
+        # the last save should be able to be automatically loaded
+        if not len(self.embeddings) == 1:
+            if index_embedding == len(self.embeddings) - 1:
+                accuracy_file = accuracy_file.replace(embs, "")
         
         os.makedirs(os.path.dirname(accuracy_file), exist_ok=True)
         with open(accuracy_file, 'wb') as handle:
@@ -211,52 +207,3 @@ class Encoding(object):
              all_abstract_predictions = None
 
          return correct_predictions, correct_abstract_predictions, correct_concrete_predictions, all_abstract_predictions, all_concrete_predictions
-
-
-    def select_three_voxels(self, voxel_selection, subject_id):
-        selected_voxels = []
-    
-        # select areas that fall in these lobes. Based on name of lobe in area of AAL atlas
-        # This is the same for all subjects
-        frontal = [3,4,5,6,7,8,9,10,11,12,13,14,15,16,23,24,25,26]; frontal_done = False
-        occipital = [49,50,51,52,53,54]; occipital_done = False
-        temporal = [81,82,83,84,85,86,87,88,89,90]; temporal_done = False
-
-        paradigms = ["sentences", "pictures", "wordclouds", "average"]
-        
-        # regions remain constant over paradigms, I arbitrarily chose pictures
-        datafile = scipy.io.loadmat(self.data_dir + subject_id + "/data_180concepts_pictures.mat")
-        voxel_to_region_mapping = datafile["meta"]["roiMultimask"][0][0][0][0]
-
-        # to check activities
-        possible_files = [scipy.io.loadmat(self.data_dir + subject_id + "/data_180concepts_" + paradigm + ".mat") for paradigm in paradigms[:-1]]
-
-        for voxels in np.random.permutation(voxel_selection):
-        
-            # voxels should not all be 0
-            for possible_file in possible_files:
-                if all(all(activities == 0 for activities in (possible_file["examples"][word][voxel] for word in range(len(possible_file)))) for voxel in voxels):
-                    continue
-
-            if all(voxel_to_region_mapping[voxel] in frontal for voxel in voxels) and frontal_done == False:
-                selected_voxels.append(voxels)
-                frontal_done = True
-                print("found voxels for frontal")
-            elif all(voxel_to_region_mapping[voxel] in occipital for voxel in voxels) and occipital_done == False:
-                selected_voxels.append(voxels)
-                occipital_done = True
-                print("found voxels for occipital")
-            elif all(voxel_to_region_mapping[voxel] in temporal for voxel in voxels) and temporal_done == False:
-                selected_voxels.append(voxels)
-                temporal_done = True
-                print("found voxels for temporal")
-            else:
-                continue
-
-            if frontal_done == True and occipital_done == True and temporal_done == True:
-                break
-
-        if not len(selected_voxels) == 3:
-            print("WE HAVE A PROBLEM!: MORE OR LESS SEARCHLIGHT SELECTED THAN 3")
-
-        return selected_voxels
