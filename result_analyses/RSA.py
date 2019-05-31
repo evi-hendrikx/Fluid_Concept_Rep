@@ -14,91 +14,7 @@ class RSAResults(ResultAnalysis):
     def __init__(self, user_dir):
         super(RSAResults, self).__init__(user_dir)
         self.analysis_method = "RSA"
-        
-# =============================================================================
-#     def create_bar_plots(self, paradigm):
-#         self.paradigm = paradigm
-#         paradigms = ["sentences", "pictures", "wordclouds", "average"]
-#         paradigm_index = paradigm - 1
-#             
-#         cor_data = self.collect_data_bar()
-#         
-#         for concreteness in cor_data.keys():
-#             mean_cor = {}
-#             
-#             # create color legend for participants
-#             colors = {}
-#             colormap = plt.cm.gist_ncar #nipy_spectral, Set1,Paired  
-#             colorst = [colormap(i) for i in np.linspace(0, 0.9,16)] 
-#             subject_ids = [file for file in listdir(self.data_dir)]
-#             legend_elements = []
-#             for counter, subject_id in enumerate(subject_ids):
-#                 colors[subject_id] = colorst[counter]
-#                 legend_elements.append(Line2D([0], [0], marker='o', color='w', markerfacecolor = colors[subject_id], label=subject_id))
-#     
-#             
-#             # determine position of the bars
-#             start_bars = 0
-#             bandwidth = 0.3
-#             x_pos_emb_area = {}
-#             x_pos_emb_area["linguistic"] = [start_bars]
-#             x_pos_emb_area["non-linguistic"] = [start_bars + bandwidth+ 0.1]
-#             x_pos_emb_area["combi"] = [start_bars + (bandwidth + 0.1) * 2]
-#             x_labels = []
-#         
-#         
-#             for embedding in cor_data[concreteness].keys():
-#                 mean_cor[embedding] = []
-#                 for area in cor_data[concreteness][embedding].keys():
-#                     if area == "precuneus":
-#                         x_labels.append("prec")
-#                     elif area == "post_cing":
-#                         x_labels.append("post. cing.")
-#                     elif area == "paraHIP":
-#                         x_labels.append("parahip.")
-#                     else:
-#                         x_labels.append(area)
-#                     
-#                     count_sign = 0
-#                     mean_cor_area = []
-#                     for participant in cor_data[concreteness][embedding][area].keys():
-#                         score = cor_data[concreteness][embedding][area][participant]["cor"]
-#                         mean_cor_area.append(score)
-#                         if cor_data[concreteness][embedding][area][participant]["p"] < 0.05:
-#                             plt.plot(x_pos_emb_area[embedding][-1], score, color = colors[participant], marker = 'o')
-#                             count_sign += 1
-#                         else:
-#                             plt.plot(x_pos_emb_area[embedding][-1], score, color = colors[participant], marker = 'o', markerfacecolor='w')
-#                         
-#                     mean_cor[embedding].append(statistics.mean(mean_cor_area))
-#                     x_pos_emb_area[embedding].append(x_pos_emb_area[embedding][-1] + 1.5)
-#                 
-#                     print("Mean accuracy area " + area + ", embedding " + embedding + " : " + str(statistics.mean(mean_cor_area)) + ", significant participants: " + str(count_sign))
-# 
-#             plt.bar(x_pos_emb_area["linguistic"][:-1], mean_cor["linguistic"], color = 'white', edgecolor = 'black', label = "linguistic", width = bandwidth, linewidth = 2)
-#             plt.bar(x_pos_emb_area["non-linguistic"][:-1], mean_cor["non-linguistic"], color = 'white', edgecolor = 'red', label = "non-linguistic", width = bandwidth, linewidth = 2)
-#             plt.bar(x_pos_emb_area["combi"][:-1], mean_cor["combi"], color = 'white', edgecolor = 'blue', label = "combi", width = bandwidth, linewidth = 2)
-#             
-#             plt.xticks(x_pos_emb_area["non-linguistic"][:-1], x_labels)
-#             if paradigms[paradigm_index] == "sentences":
-#                 title = concreteness + " - sentence"
-#             elif paradigms[paradigm_index] == "pictures":
-#                 title = concreteness + " - picture"
-#             elif paradigms[paradigm_index] == "wordclouds":
-#                 title = concreteness + " - word cloud"
-#                 
-#             plt.title(title)
-#             first_legend = plt.legend()
-#             ax = plt.gca().add_artist(first_legend)
-#             
-#             plt.legend(handles = legend_elements, loc='center left', bbox_to_anchor=(1, 0.5))
-#             plt.ylim([-0.05,0.25])
-#             plt.ylabel("accuracy")
-#             plt.xlabel("voxel selection")
-#             plt.savefig(self.save_dir + self.analysis_method + "_barplot_RSA_" + paradigms[paradigm_index] + "_" + concreteness + ".png")
-#             plt.show()
-# =============================================================================
-
+       
     def violin_plot_mix(self, sign_part_decoding = True):
         sns.set(style="whitegrid")
         
@@ -222,11 +138,7 @@ class RSAResults(ResultAnalysis):
                 else:
                     axs[counter1][counter2].set_xticklabels("")
                     
-                
-                
-                
-                
-                
+  
                 if counter1 == 0 and counter2 == 0:
                     counter2 = 1
                 elif counter1 == 0 and counter2 == 1:
@@ -235,44 +147,6 @@ class RSAResults(ResultAnalysis):
                 elif counter1 == 1 and counter2 == 0:
                     counter2 = 1
 
-        
-# =============================================================================
-#     def collect_data_bar(self):
-#         
-#         dict_cors = {}
-#         self.paradigm = 1
-#         correlations = self.load_accuracies("stable")
-#         print(correlations)
-#         
-#                     
-#         participants = ["M01", "M02","M03","M04","M05","M06","M07","M08","M09","M10", "M13","M14","M15","M16","M17","P01"]
-#         areas = ["IFG", "MTG", "post_cing", "precuneus", "FFG", "paraHIP"]
-#         embeddings = ["linguistic", "non-linguistic", "combi"]
-#         for concreteness in ["total","abstract","concrete"]:
-#             dict_cors[concreteness] = {}
-#             for embedding in embeddings:
-#                 dict_cors[concreteness][embedding] = {}
-#                 for area in areas:
-#                     dict_cors[concreteness][embedding][area] = {}
-#                     for participant in participants:
-#                         dict_cors[concreteness][embedding][area][participant] = {}
-#                         i = areas.index(area) +  len(areas) * participants.index(participant)
-#                         j = (len(areas) + 1) * len(participants) + embeddings.index(embedding)
-#                         
-#                         dict_cors[concreteness][embedding][area][participant]["cor"] = correlations[concreteness]["correlations"][i][j]
-#                         dict_cors[concreteness][embedding][area][participant]["p"] = correlations[concreteness]["p-values"][i][j]
-# 
-#             for embedding in embeddings:
-#                 for area in ["stable"]:
-#                     dict_cors[concreteness][embedding][area] = {}
-#                     for participant in participants:
-#                         dict_cors[concreteness][embedding][area][participant] = {}
-#                         i = len(areas) * len(participants) + participants.index(participant)
-#                         j = (len(areas) + 1) * len(participants) + embeddings.index(embedding)
-#                         dict_cors[concreteness][embedding][area][participant]["cor"] = correlations[concreteness]["correlations"][i][j]
-#                         dict_cors[concreteness][embedding][area][participant]["p"] = correlations[concreteness]["p-values"][i][j]
-#         return dict_cors
-# =============================================================================
                     
     def collect_data_violin(self):
         
@@ -354,103 +228,3 @@ class RSAResults(ResultAnalysis):
                             significant_participants[area].append(subject_id)
                 
         return significant_participants
-# =============================================================================
-#                     
-#                     for area in ["IFG", "MTG", "post_cing", "precuneus", "FFG", "paraHIP"]:
-#                 
-#             RSA = RSA_ROI_Stable(user_dir, paradigm) 
-#             paradigms = ["sentences","pictures","wordclouds"]
-#             file_path = "/home/evihendrikx/Documents/brain-lang-master/pereira_code/analyses/already_analysed/RSA_" + paradigms[paradigm - 1] + "_stable.pickle"
-#             
-#             print("Loading voxel selections from " + file_path)
-#             with open(file_path, 'rb') as handle:
-#                 spearman = pickle.load(handle)
-#                 
-#             keys = spearman[concreteness]["correlations"].shape[1]
-#             print(keys)
-#             randoms = 1000
-#             
-#             # make plot with average random correlation instead of distribution
-#             average_random_spearman = np.zeros((keys - randoms + 1, keys - randoms + 1))
-#             for i in np.arange(keys - randoms + 1):
-#                 for j in np.arange(keys - randoms + 1):
-#                     if j == keys - randoms and i == keys - randoms:
-#                         average_random_spearman[i][j] = 1
-#                     elif j == keys - randoms:
-#                         average_random_spearman[i][j] = np.mean(spearman[concreteness]["correlations"][i][j:])
-#                     elif i == keys - randoms:
-#                         average_random_spearman[i][j] = np.mean(spearman[concreteness]["correlations"][j][i:])
-#                     else:
-#                         average_random_spearman[i][j] = spearman[concreteness]["correlations"][i][j]
-#                         
-#             labels = []
-#             for participant in ["M01", "M02","M03","M04","M05","M06","M07","M08","M09","M10", "M13","M14","M15","M16","M17","P01"]:
-#                 for area in :
-#                     labels.append(participant + "_" + area)
-#             for participant in ["M01", "M02","M03","M04","M05","M06","M07","M08","M09","M10", "M13","M14","M15","M16","M17","P01"]:
-#                 labels.append(participant + "_stable")
-#             encoder = 
-#             for i in range(1000):
-#                 encoder.append("RandomEncoder")
-#             for embedding in encoder:
-#                 labels.append(embedding)
-#     
-#     
-#         RSA.plot(average_random_spearman, spearman[concreteness]["p-values"], labels, title="RDM Comparison Spearman", concreteness = concreteness, cbarlabel="Spearman Correlation", between_matrices = True)
-#         
-# =============================================================================
-        ################################################
-# =============================================================================
-#                 if not ax:
-#             ax = plt.gca()
-#     
-#         # Plot the heatmap
-#         im = ax.imshow(data, **kwargs)
-#         ax.set_title(title, pad =50.0)
-#         # create an axes on the right side of ax. The width of cax will be 5%
-#         # of ax and the padding between cax and ax will be fixed at 0.05 inch.
-#         divider = make_axes_locatable(ax)
-#         cax = divider.append_axes("right", size="5%", pad=0.05)
-#         cbar = ax.figure.colorbar(im, ax=ax, cax=cax, **cbar_kw)
-#         cbar.ax.set_ylabel(cbarlabel, rotation=-90, va="bottom")
-#     
-#         # We want to show all ticks...
-#         ax.set_xticks(np.arange(data.shape[1]))
-#         ax.set_yticks(np.arange(data.shape[0]))
-#         # ... and label them with the respective list entries.
-#         ax.set_xticklabels(col_labels)
-#         ax.set_yticklabels(row_labels)
-#     
-#         # Let the horizontal axes labeling appear on top.
-#         ax.tick_params(top=True, bottom=False,
-#                        labeltop=True, labelbottom=False)
-#     
-#         # Rotate the tick labels and set their alignment.
-#         plt.setp(ax.get_xticklabels(), rotation=-90, ha="right",
-#                  rotation_mode="anchor")
-#     
-#         # Turn spines off and create white grid.
-#         # for edge, spine in ax.spines.items():
-#         #    spine.set_visible(False)
-#     
-#         # what is happening here?
-#         ax.set_xticks(np.arange(0, data.shape[1] + 1) - 0.5, minor=True)
-#         ax.set_yticks(np.arange(0, data.shape[0] + 1) - 0.5, minor=True)
-#         
-#         if not p_values == []:
-#             for i in range(data.shape[0]):
-#                 for j in range(data.shape[1]):
-#                     if i == data.shape[0] - 1 or j == data.shape[1] - 1:
-#                         continue
-#                     else:
-#                         if p_values[i][j] < 0.05:
-#                             #ax.text(i, j, str(round(data[i][j], 2)) + "*", ha="center", va="center", color="w")
-#                             ax.text(i, j, "*", ha="center", va="center", color="w")
-# # =============================================================================
-# #                         else:
-# #                             ax.text(i, j, round(data[i][j], 2), ha="center", va="center", color="w")
-# # 
-# # =============================================================================
-#     
-#         return im, cbar
-# =============================================================================
