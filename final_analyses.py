@@ -7,7 +7,7 @@ from analyses.clustering import ClusterROI, ClusterStable
 import pickle 
 
 
-user_dir = "USERDIR"
+user_dir = "USER_DIR"
 
         
 results = ClassificationResults(user_dir)
