@@ -1,4 +1,4 @@
-from select_voxels.selection_methods import SelectROI, SelectStable, SelectSearchlight
+from select_voxels.selection_methods import SelectROI, SelectStable
 from embeddings.all_embeddings import PereiraEncoder, ImageEncoder, CombiEncoder, RandomEncoder
 from analyses.RSA_abstract import RSA
 import scipy
