@@ -1,7 +1,6 @@
 from result_analyses.result_analyses_abstract import ResultAnalysis
 import matplotlib.pyplot as plt
 import numpy as np
-import result_analyses.table_roi_separate as table
 import seaborn as sns
 from pandas import DataFrame, melt, concat
 import pandas as pd
