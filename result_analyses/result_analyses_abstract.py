@@ -1,7 +1,7 @@
 from analyses.classification import ClassifyStable, ClassifyROI, ClassifySearchlight
-from analyses.encoding import EncodingStable, EncodingROI, EncodingSearchlight
-from analyses.RSA import RSA_ROI_Stable, RSA_Searchlight
-from analyses.clustering import ClusterROI, ClusterStable, ClusterSearchlight
+from analyses.encoding import EncodingStable, EncodingROI
+from analyses.RSA import RSA_ROI_Stable
+from analyses.clustering import ClusterROI, ClusterStable
 from os import path, makedirs, listdir
 import pickle
 
@@ -33,8 +33,6 @@ class ResultAnalysis(object):
                 encoding = EncodingStable(self.user_dir, self.paradigm)
             elif selection_method == "roi":
                 encoding = EncodingROI(self.user_dir, self.paradigm)
-            elif selection_method == "searchlight":
-                encoding = EncodingSearchlight(self.user_dir, self.paradigm)
                 
             accuracy_file = encoding.encode()
             
@@ -42,8 +40,6 @@ class ResultAnalysis(object):
             if selection_method == "roi" or selection_method == "stable":
                 print(self.paradigm)
                 rsa = RSA_ROI_Stable(self.user_dir, self.paradigm)
-            else:
-                rsa = RSA_Searchlight(self.user_dir, self.paradigm)
                 
             accuracy_file = rsa.run_RSA()
             
